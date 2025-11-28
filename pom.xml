@@ -9,7 +9,7 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>ru.safoev</groupId>
-	<artifactId>gum-system</artifactId>
+	<artifactId>gym-system</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>gum-system</name>
 	<description>gum project for Spring Boot</description>

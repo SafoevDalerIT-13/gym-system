@@ -1,4 +1,4 @@
-package ru.safoev.gum;
+package ru.safoev.maingym;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

@@ -12,7 +12,7 @@ public record EquipmentDto(
 
         LocalDate buyDate,
 
-        String equipmentStatus,
+        ru.safoev.enumlists.EquipmentStatus equipmentStatus,
 
         @NotNull(message = "ID зала обязательно")
         Long gymId

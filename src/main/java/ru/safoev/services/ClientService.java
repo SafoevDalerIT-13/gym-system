@@ -23,12 +23,12 @@ public class ClientService {
   public ClientDto getClientById(Long id) {
     ClientEntity client = clientRepository.findById(id)
             .orElseThrow(() -> new IllegalArgumentException("Client not found with id: " + id));
-    return toDto(client);
+    return  toDtoClient(client);
   }
 
   public List<ClientDto> getAllClients() {
     return clientRepository.findAll().stream()
-            .map(this::toDto)
+            .map(this::toDtoClient)
             .collect(Collectors.toList());
   }
 
@@ -43,7 +43,7 @@ public class ClientService {
             clientDto.registrationDate() : java.time.LocalDateTime.now());
 
     ClientEntity saved = clientRepository.save(client);
-    return toDto(saved);
+    return toDtoClient(saved);
   }
 
   public ClientDto updateClient(Long id, ClientDto clientDto) {
@@ -67,7 +67,7 @@ public class ClientService {
     }
 
     ClientEntity updated = clientRepository.save(client);
-    return toDto(updated);
+    return toDtoClient(updated);
   }
 
   public void deleteClient(Long id) {
@@ -77,7 +77,7 @@ public class ClientService {
     clientRepository.deleteById(id);
   }
 
-  public ClientDto toDto(ClientEntity client) {
+  private ClientDto toDtoClient(ClientEntity client) {
     return new ClientDto(
             client.getClient_id(),
             client.getClient_first_name(),

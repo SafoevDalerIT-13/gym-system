@@ -24,7 +24,7 @@ public class RateEntity {
   private String rate_price_period;
 
   @Column(name = "rate_duration_days", nullable = false)
-  private Integer rate_duration_ays;
+  private Integer rate_duration_days;
 
   @Column(name = "rate_description", columnDefinition = "TEXT")
   private String rate_description;
@@ -37,7 +37,7 @@ public class RateEntity {
     this.rate_name = rate_name;
     this.rate_price = rate_price;
     this.rate_price_period = rate_price_period;
-    this.rate_duration_ays = rate_duration_ays;
+    this.rate_duration_days = rate_duration_ays;
     this.rate_description = rate_description;
   }
 
@@ -73,12 +73,12 @@ public class RateEntity {
     this.rate_price_period = rate_price_period;
   }
 
-  public Integer getRate_duration_ays() {
-    return rate_duration_ays;
+  public Integer getRate_duration_days() {
+    return rate_duration_days;
   }
 
-  public void setRate_duration_ays(Integer rate_duration_ays) {
-    this.rate_duration_ays = rate_duration_ays;
+  public void setRate_duration_days(Integer rate_duration_days) {
+    this.rate_duration_days = rate_duration_days;
   }
 
   public String getRate_description() {

@@ -43,13 +43,13 @@ public class EquipmentController {
     return ResponseEntity.status(HttpStatus.CREATED).body(equipmentService.createEquipment(equipmentDto));
   }
 
-  @PutMapping("/update")
+  @PutMapping("/update/{id}")
   public ResponseEntity<EquipmentDto> updateEquipment(@PathVariable("id") Long id, EquipmentDto equipmentDto) {
     log.info("Called updateEmployee with id: {}", id);
     return ResponseEntity.ok(equipmentService.updateEquipment(id,equipmentDto));
   }
 
-  @DeleteMapping("/delete")
+  @DeleteMapping("/delete/{id}")
   public void deleteEquipment(@PathVariable("id") Long id) {
     log.info("Called deleteEmployee with id: {}",id);
     equipmentService.deleteEquipment(id);

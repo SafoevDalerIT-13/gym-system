@@ -1,9 +1,11 @@
 package ru.safoev.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import ru.safoev.dtorecords.ClientDto;
 import ru.safoev.entity.ClientEntity;
+import ru.safoev.filters.ClientSearchFilter;
 import ru.safoev.mappers.ClientMapper;
 import ru.safoev.repositoryinterface.ClientRepository;
 
@@ -34,6 +36,22 @@ public class ClientService {
             .map(clientMapper::toDto)
             .collect(Collectors.toList());
   }
+
+  public List<ClientDto> searchAllClientsByFilter(ClientSearchFilter filter) {
+    int pageSize = filter.pageSize() != null ? filter.pageSize() : 10;
+    int pageNumber = filter.pageNumber() != null ? filter.pageNumber() : 0;
+    var pageable= Pageable.ofSize(pageSize).withPage(pageNumber);
+    List<ClientEntity> allEntity = clientRepository.searchAllByFilter(
+            filter.client_id(),
+            filter.client_email(),
+            pageable
+    );
+
+    return allEntity.stream()
+            .map(clientMapper::toDto)
+            .collect(Collectors.toList());
+  }
+
 
   public ClientDto createClient(ClientDto clientDto) {
     ClientEntity entityToSave = clientMapper.toEntity(clientDto);

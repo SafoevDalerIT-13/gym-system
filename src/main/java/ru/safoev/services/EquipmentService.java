@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import ru.safoev.dtorecords.EquipmentDto;
 import ru.safoev.entity.EquipmentEntity;
 import ru.safoev.entity.GymEntity;
+import ru.safoev.mappers.EquipmentMapper;
 import ru.safoev.repositoryinterface.EquipmentRepository;
 import ru.safoev.repositoryinterface.GymRepository;
 
@@ -15,63 +16,50 @@ import java.util.stream.Collectors;
 @Service
 public class EquipmentService {
   private final EquipmentRepository equipmentRepository;
-
   private final GymRepository gymRepository;
+  private final EquipmentMapper equipmentMapper;
 
   @Autowired
-  public EquipmentService(EquipmentRepository equipmentRepository, GymRepository gymRepository) {
+  public EquipmentService(EquipmentRepository equipmentRepository, GymRepository gymRepository, EquipmentMapper equipmentMapper) {
     this.equipmentRepository = equipmentRepository;
     this.gymRepository = gymRepository;
+    this.equipmentMapper = equipmentMapper;
   }
 
   public EquipmentDto getEquipmentById(Long id) {
     EquipmentEntity equipmentEntity = equipmentRepository.findById(id).
             orElseThrow(() -> new IllegalArgumentException("Equipment not found with id: " + id));
 
-    return toDtoEquipment(equipmentEntity);
+    return equipmentMapper.toDto(equipmentEntity);
   }
 
   public List<EquipmentDto> getAllEquipment() {
     return equipmentRepository.findAll().stream()
-            .map(this::toDtoEquipment)
+            .map(equipmentMapper::toDto)
             .collect(Collectors.toList());
   }
 
   public EquipmentDto createEquipment(EquipmentDto equipmentDto) {
+    EquipmentEntity entityToSave = equipmentMapper.toEntity(equipmentDto);
     GymEntity gym = gymRepository.findById(equipmentDto.gymId())
             .orElseThrow(() -> new IllegalArgumentException("Gym not found with id: " + equipmentDto.gymId()));
-    EquipmentEntity equipmentEntity = new EquipmentEntity();
-    equipmentEntity.setEquipmentName(equipmentDto.equipmentName());
-    equipmentEntity.setEquipment_buyDate(equipmentDto.buyDate());
-    equipmentEntity.setEquipmentStatus(equipmentDto.equipmentStatus());
-    equipmentEntity.setGym(gym);
+    entityToSave.setGym(gym);
 
-    EquipmentEntity saved = equipmentRepository.save(equipmentEntity);
-    return toDtoEquipment(saved);
+    EquipmentEntity saved = equipmentRepository.save(entityToSave);
+    return equipmentMapper.toDto(saved);
   }
 
   public EquipmentDto updateEquipment(Long id, EquipmentDto equipmentDto) {
-    EquipmentEntity equipment = equipmentRepository.findById(id)
+    EquipmentEntity existingEquipment = equipmentRepository.findById(id)
             .orElseThrow(() -> new IllegalArgumentException("Equipment not found with id: " + id));
+    equipmentMapper.updateEntityFromDto(equipmentDto, existingEquipment);
 
-    if (equipmentDto.equipmentName() != null) {
-      equipment.setEquipmentName(equipmentDto.equipmentName());
-    }
-    if (equipmentDto.buyDate() != null) {
-      equipment.setEquipment_buyDate(equipmentDto.buyDate());
-    }
-    if (equipmentDto.equipmentStatus() != null) {
-      equipment.setEquipmentStatus(equipmentDto.equipmentStatus());
-    }
+    GymEntity gym = gymRepository.findById(equipmentDto.gymId())
+            .orElseThrow(() -> new IllegalArgumentException("Gym not found with id: " + equipmentDto.gymId()));
+    existingEquipment.setGym(gym);
 
-    if (equipmentDto.gymId() != null) {
-      GymEntity gym = gymRepository.findById(equipmentDto.gymId())
-              .orElseThrow(() -> new IllegalArgumentException("Gym not found with id: " + equipmentDto.gymId()));
-      equipment.setGym(gym);
-    }
-
-    EquipmentEntity updated = equipmentRepository.save(equipment);
-    return toDtoEquipment(updated);
+    EquipmentEntity updated = equipmentRepository.save(existingEquipment);
+    return equipmentMapper.toDto(updated);
   }
 
 
@@ -80,17 +68,5 @@ public class EquipmentService {
       throw new NoSuchElementException("Equipment not found with id: " + id);
     }
     equipmentRepository.deleteById(id);
-  }
-
-  private EquipmentDto toDtoEquipment(EquipmentEntity equipment) {
-    Long gymId = equipment.getGym() != null ? equipment.getGym().getGum_id() : null;
-
-    return new EquipmentDto(
-            equipment.getEquipmentId(),
-            equipment.getEquipmentName(),
-            equipment.getEquipment_buyDate(),
-            equipment.getEquipmentStatus(),
-            gymId
-    );
   }
 }

@@ -30,4 +30,23 @@ public class ClientMapper {
             dto.registrationDate()
     );
   }
+
+
+  public void updateEntityFromDto(ClientDto dto, ClientEntity entity) {
+    if (dto.firstName() != null) {
+      entity.setClient_first_name(dto.firstName());
+    }
+    if (dto.lastName() != null) {
+      entity.setClient_last_name(dto.lastName());
+    }
+    if (dto.phone() != null) {
+      entity.setClient_phone(dto.phone());
+    }
+    if (dto.email() != null) {
+      entity.setClient_email(dto.email());
+    }
+    if (dto.dateOfBirth() != null) {
+      entity.setClient_date_of_birth(dto.dateOfBirth());
+    }
+  }
 }

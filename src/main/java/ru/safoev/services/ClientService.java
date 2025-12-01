@@ -42,15 +42,12 @@ public class ClientService {
   }
 
   public ClientDto updateClient(Long id, ClientDto clientDto) {
-    ClientEntity existingClient = clientRepository.findById(id)
+    ClientEntity entity = clientRepository.findById(id)
             .orElseThrow(() -> new IllegalArgumentException("Client not found with id: " + id));
 
-    ClientEntity entityToUpdate = clientMapper.toEntity(clientDto);
-    entityToUpdate.setClient_id(existingClient.getClient_id());
-    entityToUpdate.setClient_registration_date(existingClient.getClient_registration_date());
-
-    ClientEntity updatedEntity = clientRepository.save(entityToUpdate);
-    return clientMapper.toDto(updatedEntity);
+    clientMapper.updateEntityFromDto(clientDto, entity);
+    ClientEntity updated = clientRepository.save(entity);
+    return clientMapper.toDto(updated);
   }
 
   public void deleteClient(Long id) {

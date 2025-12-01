@@ -4,67 +4,63 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.safoev.dtorecords.GymDto;
 import ru.safoev.entity.GymEntity;
+import ru.safoev.mappers.GymMapper;
 import ru.safoev.repositoryinterface.GymRepository;
 
+import java.time.LocalTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
 public class GymService {
   private final GymRepository gymRepository;
+  private final GymMapper gymMapper;
 
   @Autowired
-  public GymService(GymRepository gymRepository) {
+  public GymService(GymRepository gymRepository, GymMapper gymMapper) {
     this.gymRepository = gymRepository;
+    this.gymMapper = gymMapper;
   }
 
   public GymDto getGymById(Long id) {
     GymEntity gym = gymRepository.findById(id).
             orElseThrow(()-> new IllegalArgumentException("Gym not found with id: " + id));
-    return  toDtoGym(gym);
+    return  gymMapper.toDto(gym);
   }
 
   public List<GymDto> getAllGym() {
     return gymRepository.findAll().stream()
-            .map(this::toDtoGym)
+            .map(gymMapper::toDto)
             .collect(Collectors.toList());
   }
 
   public GymDto createGym(GymDto gymDto) {
-    GymEntity gym = new GymEntity();
-    gym.setGum_name(gymDto.gymName());
-    gym.setGum_phone(gymDto.gymPhone());
-    gym.setGum_address(gymDto.address());
-    gym.setGum_open_time(gymDto.openTime());
-    gym.setGum_end_time(gymDto.closeTime());
+    if (!gymDto.closeTime().isAfter(gymDto.openTime())) {
+      throw new IllegalArgumentException("Close time must be after open time");
+    }
 
-    GymEntity save = gymRepository.save(gym);
-    return toDtoGym(save);
+    GymEntity entityToSave = gymMapper.toEntity(gymDto);
+    GymEntity saved = gymRepository.save(entityToSave);
+    return gymMapper.toDto(saved);
   }
 
   public GymDto updateGym(Long id, GymDto gymDto) {
-    GymEntity gym = gymRepository.findById(id).
-            orElseThrow(()-> new IllegalArgumentException("Gym not found with id: " + id));
+    GymEntity existingGym = gymRepository.findById(id)
+            .orElseThrow(() -> new IllegalArgumentException("Gym not found with id: " + id));
 
-    if(gymDto.gymName() != null) {
-      gym.setGum_name(gymDto.gymName());
-    }
-    if(gymDto.gymPhone() != null) {
-      gym.setGum_phone(gymDto.gymPhone());
-    }
-    if(gymDto.address() != null) {
-      gym.setGum_address(gymDto.address());
-    }
-    if(gymDto.openTime() != null) {
-      gym.setGum_open_time(gymDto.openTime());
-    }
-    if(gymDto.closeTime() != null) {
-      gym.setGum_end_time(gymDto.closeTime());
+    gymMapper.updateEntityFromDto(gymDto, existingGym);
+
+    if (gymDto.openTime() != null || gymDto.closeTime() != null) {
+      LocalTime openTime = gymDto.openTime() != null ? gymDto.openTime() : existingGym.getGum_open_time();
+      LocalTime closeTime = gymDto.closeTime() != null ? gymDto.closeTime() : existingGym.getGum_end_time();
+
+      if (!closeTime.isAfter(openTime)) {
+        throw new IllegalArgumentException("Close time must be after open time");
+      }
     }
 
-    GymEntity update = gymRepository.save(gym);
-    return toDtoGym(update);
-
+    GymEntity updated = gymRepository.save(existingGym);
+    return gymMapper.toDto(updated);
   }
 
   public void deleteGym(Long id) {
@@ -74,14 +70,4 @@ public class GymService {
     gymRepository.deleteById(id);
   }
 
-  private GymDto toDtoGym(GymEntity gym) {
-    return new GymDto(
-            gym.getGum_id(),
-            gym.getGum_name(),
-            gym.getGum_address(),
-            gym.getGum_phone(),
-            gym.getGum_open_time(),
-            gym.getGum_end_time()
-    );
-  }
 }

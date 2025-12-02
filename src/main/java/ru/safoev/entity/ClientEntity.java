@@ -36,6 +36,13 @@ public class ClientEntity {
   public ClientEntity() {
   }
 
+  @PrePersist
+  protected void onCreate() {
+    if (client_registration_date == null) {
+      client_registration_date = LocalDateTime.now();
+    }
+  }
+
   public ClientEntity(Long client_id, String client_first_name, String client_last_name, String client_phone, String client_email, LocalDate client_date_of_birth, LocalDateTime client_registration_date) {
     this.client_id = client_id;
     this.client_first_name = client_first_name;

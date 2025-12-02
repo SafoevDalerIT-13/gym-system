@@ -32,6 +32,7 @@ public class SubscriptionEntity {
   private String subscription_freezePeriod;
 
   @Column(name = "subscription_status", length = 20)
+  @Enumerated(EnumType.STRING)
   private SubscriptionStatus subscription_status = SubscriptionStatus.ACTIVE;
 
   public SubscriptionEntity() {

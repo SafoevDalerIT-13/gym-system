@@ -8,12 +8,12 @@ import ru.safoev.entity.GymEntity;
 public class GymMapper {
   public GymDto toDto(GymEntity entity) {
     return new GymDto(
-            entity.getGum_id(),
-            entity.getGum_name(),
-            entity.getGum_address(),
-            entity.getGum_phone(),
-            entity.getGum_open_time(),
-            entity.getGum_end_time()
+            entity.getGym_id(),
+            entity.getGym_name(),
+            entity.getGym_address(),
+            entity.getGym_phone(),
+            entity.getGym_open_time(),
+            entity.getGym_end_time()
     );
   }
 
@@ -30,19 +30,19 @@ public class GymMapper {
 
   public void updateEntityFromDto(GymDto dto, GymEntity entity) {
     if (dto.gymName() != null) {
-      entity.setGum_name(dto.gymName());
+      entity.setGym_name(dto.gymName());
     }
     if (dto.address() != null) {
-      entity.setGum_address(dto.address());
+      entity.setGym_address(dto.address());
     }
     if (dto.gymPhone() != null) {
-      entity.setGum_phone(dto.gymPhone());
+      entity.setGym_phone(dto.gymPhone());
     }
     if (dto.openTime() != null) {
-      entity.setGum_open_time(dto.openTime());
+      entity.setGym_open_time(dto.openTime());
     }
     if (dto.closeTime() != null) {
-      entity.setGum_end_time(dto.closeTime());
+      entity.setGym_end_time(dto.closeTime());
     }
   }
 }

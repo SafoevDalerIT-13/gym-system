@@ -7,7 +7,7 @@ import ru.safoev.entity.EmployeeEntity;
 @Component
 public class EmployeeMapper {
   public EmployeeDto toDto(EmployeeEntity employeeEntity) {
-    Long gymId = employeeEntity.getGym() != null ? employeeEntity.getGym().getGum_id() : null;
+    Long gymId = employeeEntity.getGym() != null ? employeeEntity.getGym().getGym_id() : null;
     return new EmployeeDto(
             employeeEntity.getEmployees_id(),
             employeeEntity.getEmployees_first_name(),

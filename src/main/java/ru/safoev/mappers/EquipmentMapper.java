@@ -8,7 +8,7 @@ import ru.safoev.entity.EquipmentEntity;
 public class EquipmentMapper {
 
   public EquipmentDto toDto(EquipmentEntity entity) {
-    Long gymId = entity.getGym() != null ? entity.getGym().getGum_id() : null;
+    Long gymId = entity.getGym() != null ? entity.getGym().getGym_id() : null;
 
     return new EquipmentDto(
             entity.getEquipmentId(),

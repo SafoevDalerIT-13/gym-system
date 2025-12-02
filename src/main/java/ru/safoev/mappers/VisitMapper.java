@@ -11,7 +11,7 @@ public class VisitMapper {
 
   public VisitDto toDto(VisitEntity entity) {
     Long clientId = entity.getClient() != null ? entity.getClient().getClient_id() : null;
-    Long gymId = entity.getGym() != null ? entity.getGym().getGum_id() : null;
+    Long gymId = entity.getGym() != null ? entity.getGym().getGym_id() : null;
 
     return new VisitDto(
             entity.getVisitId(),

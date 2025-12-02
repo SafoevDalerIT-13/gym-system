@@ -51,8 +51,8 @@ public class GymService {
     gymMapper.updateEntityFromDto(gymDto, existingGym);
 
     if (gymDto.openTime() != null || gymDto.closeTime() != null) {
-      LocalTime openTime = gymDto.openTime() != null ? gymDto.openTime() : existingGym.getGum_open_time();
-      LocalTime closeTime = gymDto.closeTime() != null ? gymDto.closeTime() : existingGym.getGum_end_time();
+      LocalTime openTime = gymDto.openTime() != null ? gymDto.openTime() : existingGym.getGym_open_time();
+      LocalTime closeTime = gymDto.closeTime() != null ? gymDto.closeTime() : existingGym.getGym_end_time();
 
       if (!closeTime.isAfter(openTime)) {
         throw new IllegalArgumentException("Close time must be after open time");

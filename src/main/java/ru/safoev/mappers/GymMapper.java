@@ -4,8 +4,33 @@ import org.springframework.stereotype.Component;
 import ru.safoev.dtorecords.GymDto;
 import ru.safoev.entity.GymEntity;
 
+/**
+ * Маппер для преобразования между сущностью GymEntity и DTO GymDto.
+ * <p>
+ * Этот компонент отвечает за преобразование данных между слоем сущностей
+ * и слоем передачи данных для фитнес-залов.
+ * Используется для изоляции логики преобразования данных фитнес-залов.
+ * </p>
+ *
+ * @Component указывает, что этот класс является Spring компонентом
+ *
+ * @author SafoevDalerIT-13
+ * @version 1.0
+ * @since 2025
+ */
 @Component
 public class GymMapper {
+
+  /**
+   * Преобразует сущность GymEntity в DTO GymDto.
+   * <p>
+   * Используется при получении данных фитнес-зала из базы данных
+   * для передачи клиенту API.
+   * </p>
+   *
+   * @param entity сущность фитнес-зала из базы данных
+   * @return DTO фитнес-зала для передачи данных
+   */
   public GymDto toDto(GymEntity entity) {
     return new GymDto(
             entity.getGym_id(),
@@ -17,6 +42,16 @@ public class GymMapper {
     );
   }
 
+  /**
+   * Преобразует DTO GymDto в сущность GymEntity.
+   * <p>
+   * Используется при создании нового фитнес-зала или полном обновлении
+   * существующего фитнес-зала.
+   * </p>
+   *
+   * @param dto DTO фитнес-зала, полученный от клиента API
+   * @return сущность фитнес-зала для сохранения в базе данных
+   */
   public GymEntity toEntity(GymDto dto) {
     return new GymEntity(
             dto.gymId(),
@@ -28,6 +63,16 @@ public class GymMapper {
     );
   }
 
+  /**
+   * Обновляет существующую сущность GymEntity данными из DTO GymDto.
+   * <p>
+   * Используется для частичного обновления фитнес-зала.
+   * Обновляются только те поля, которые не являются null в DTO.
+   * </p>
+   *
+   * @param dto DTO с новыми данными фитнес-зала
+   * @param entity существующая сущность фитнес-зала, которую нужно обновить
+   */
   public void updateEntityFromDto(GymDto dto, GymEntity entity) {
     if (dto.gymName() != null) {
       entity.setGym_name(dto.gymName());

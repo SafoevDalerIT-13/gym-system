@@ -4,8 +4,34 @@ import org.springframework.stereotype.Component;
 import ru.safoev.dtorecords.EmployeeDto;
 import ru.safoev.entity.EmployeeEntity;
 
+/**
+ * Маппер для преобразования между сущностью EmployeeEntity и DTO EmployeeDto.
+ * <p>
+ * Этот компонент отвечает за преобразование данных между слоем сущностей
+ * и слоем передачи данных для сотрудников фитнес-центра.
+ * Обрабатывает связь с сущностью GymEntity для получения/установки идентификатора зала.
+ * </p>
+ *
+ * @Component указывает, что этот класс является Spring компонентом
+ *
+ * @author SafoevDalerIT-13
+ * @version 1.0
+ * @since 2025
+ */
 @Component
 public class EmployeeMapper {
+
+  /**
+   * Преобразует сущность EmployeeEntity в DTO EmployeeDto.
+   * <p>
+   * Используется при получении данных сотрудника из базы данных
+   * для передачи клиенту API. Извлекает идентификатор зала из связанной
+   * сущности GymEntity.
+   * </p>
+   *
+   * @param employeeEntity сущность сотрудника из базы данных
+   * @return DTO сотрудника для передачи данных
+   */
   public EmployeeDto toDto(EmployeeEntity employeeEntity) {
     Long gymId = employeeEntity.getGym() != null ? employeeEntity.getGym().getGym_id() : null;
     return new EmployeeDto(
@@ -22,6 +48,17 @@ public class EmployeeMapper {
     );
   }
 
+  /**
+   * Преобразует DTO EmployeeDto в сущность EmployeeEntity.
+   * <p>
+   * Используется при создании нового сотрудника или полном обновлении
+   * существующего сотрудника.
+   * Поле gym устанавливается в null и должно быть установлено отдельно.
+   * </p>
+   *
+   * @param dto DTO сотрудника, полученный от клиента API
+   * @return сущность сотрудника для сохранения в базе данных
+   */
   public EmployeeEntity toEntity(EmployeeDto dto) {
     return new EmployeeEntity(
             dto.employeeId(),
@@ -29,7 +66,7 @@ public class EmployeeMapper {
             dto.lastName(),
             dto.empPhone(),
             dto.empEmail(),
-            null,
+            null, // gym устанавливается отдельно
             dto.hireDate(),
             dto.dismissalDate(),
             dto.post(),
@@ -37,6 +74,17 @@ public class EmployeeMapper {
     );
   }
 
+  /**
+   * Обновляет существующую сущность EmployeeEntity данными из DTO EmployeeDto.
+   * <p>
+   * Используется для частичного обновления сотрудника.
+   * Обновляются только те поля, которые не являются null в DTO.
+   * Поле gym не обновляется в этом методе и должно обновляться отдельно.
+   * </p>
+   *
+   * @param dto DTO с новыми данными сотрудника
+   * @param entity существующая сущность сотрудника, которую нужно обновить
+   */
   public void updateEntityFromDto(EmployeeDto dto, EmployeeEntity entity) {
     if (dto.firstName() != null) {
       entity.setEmployees_first_name(dto.firstName());
@@ -47,7 +95,7 @@ public class EmployeeMapper {
     if (dto.empPhone() != null) {
       entity.setEmployees_phone(dto.empPhone());
     }
-    if (dto.empEmail()!= null) {
+    if (dto.empEmail() != null) {
       entity.setEmployees_email(dto.empEmail());
     }
     if (dto.hireDate() != null) {
@@ -62,7 +110,5 @@ public class EmployeeMapper {
     if (dto.salary() != null) {
       entity.setEmployees_salary(dto.salary());
     }
-
   }
-
 }

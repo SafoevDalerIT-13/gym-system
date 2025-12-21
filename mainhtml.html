@@ -1,0 +1,1726 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FitnessPro CRM - Элегантный интерфейс управления фитнес-центром</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --black: #0a0a0a;
+            --dark-gray: #1a1a1a;
+            --gray: #2a2a2a;
+            --light-gray: #3a3a3a;
+            --lighter-gray: #4a4a4a;
+            --white: #f5f5f5;
+            --green: #10b981;
+            --green-dark: #059669;
+            --green-light: #34d399;
+            --green-gradient: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            --shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            --shadow-light: 0 10px 40px rgba(0, 0, 0, 0.2);
+            --radius: 16px;
+            --transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            --glass: rgba(255, 255, 255, 0.05);
+            --glass-border: rgba(255, 255, 255, 0.1);
+        }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        }
+        html {
+            scroll-behavior: smooth;
+        }
+        body {
+            background: var(--black);
+            color: var(--white);
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+        .parallax-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -2;
+            background: 
+                radial-gradient(circle at 10% 20%, rgba(16, 185, 129, 0.05) 0%, transparent 40%),
+                radial-gradient(circle at 90% 80%, rgba(16, 185, 129, 0.03) 0%, transparent 40%),
+                radial-gradient(circle at 50% 50%, rgba(16, 185, 129, 0.02) 0%, transparent 60%);
+        }
+        .parallax-layer {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+        .layer-1 {
+            background: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z' fill='%2310b981' fill-opacity='0.03' fill-rule='evenodd'/%3E%3C/svg%3E");
+            opacity: 0.3;
+            animation: float 20s ease-in-out infinite;
+        }
+        .layer-2 {
+            background: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z' fill='%2310b981' fill-opacity='0.02' fill-rule='evenodd'/%3E%3C/svg%3E");
+            opacity: 0.2;
+            animation: floatReverse 25s ease-in-out infinite;
+        }
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            33% { transform: translate(30px, -20px) rotate(1deg); }
+            66% { transform: translate(-20px, 15px) rotate(-1deg); }
+        }
+        @keyframes floatReverse {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            33% { transform: translate(-30px, 20px) rotate(-1deg); }
+            66% { transform: translate(20px, -15px) rotate(1deg); }
+        }
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(50px) scale(0.95); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        @keyframes slideInLeft {
+            from { opacity: 0; transform: translateX(-50px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        @keyframes slideInRight {
+            from { opacity: 0; transform: translateX(50px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        .floating-shapes {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+        .shape {
+            position: absolute;
+            background: rgba(16, 185, 129, 0.03);
+            border: 1px solid rgba(16, 185, 129, 0.1);
+            border-radius: 50%;
+            animation: float 20s ease-in-out infinite;
+        }
+        .shape:nth-child(1) {
+            width: 300px;
+            height: 300px;
+            top: 10%;
+            left: 5%;
+            animation-delay: 0s;
+        }
+        .shape:nth-child(2) {
+            width: 200px;
+            height: 200px;
+            top: 20%;
+            right: 10%;
+            animation-delay: 5s;
+        }
+        .shape:nth-child(3) {
+            width: 150px;
+            height: 150px;
+            bottom: 15%;
+            left: 15%;
+            animation-delay: 10s;
+        }
+        .main-container {
+            position: relative;
+            z-index: 1;
+            padding: 40px 20px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 60px;
+            position: relative;
+        }
+        .logo-container {
+            position: relative;
+            display: inline-block;
+            margin-bottom: 30px;
+        }
+        .logo-glow {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(16, 185, 129, 0.1) 0%, transparent 70%);
+            filter: blur(40px);
+            z-index: -1;
+            animation: pulse 4s ease-in-out infinite;
+        }
+        .logo {
+            font-size: 4.5rem;
+            color: var(--white);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 25px;
+            padding: 30px;
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius);
+            animation: fadeInUp 1.2s ease-out;
+            position: relative;
+            overflow: hidden;
+        }
+        .logo-icon {
+            font-size: 5rem;
+            color: var(--green);
+            filter: drop-shadow(0 0 20px rgba(16, 185, 129, 0.5));
+        }
+        .logo-text {
+            font-weight: 800;
+            letter-spacing: 2px;
+            background: linear-gradient(135deg, var(--white) 0%, var(--green-light) 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 0 0 30px rgba(16, 185, 129, 0.3);
+        }
+        .logo-subtitle {
+            font-size: 1.4rem;
+            color: var(--green-light);
+            margin-top: 10px;
+            font-weight: 300;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            animation: fadeIn 1.5s ease-out 0.5s both;
+        }
+        .tagline {
+            font-size: 1.3rem;
+            color: rgba(245, 245, 245, 0.7);
+            max-width: 800px;
+            margin: 0 auto 50px;
+            line-height: 1.8;
+            font-weight: 300;
+            animation: fadeIn 1.5s ease-out 0.7s both;
+        }
+        .stats-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            margin-bottom: 60px;
+        }
+        .stat-card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius);
+            padding: 40px 30px;
+            text-align: center;
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+            animation: fadeInUp 0.8s ease-out;
+        }
+        .stat-card:nth-child(1) { animation-delay: 0.1s; }
+        .stat-card:nth-child(2) { animation-delay: 0.2s; }
+        .stat-card:nth-child(3) { animation-delay: 0.3s; }
+        .stat-card:nth-child(4) { animation-delay: 0.4s; }
+        .stat-icon {
+            font-size: 3.5rem;
+            color: var(--green);
+            margin-bottom: 25px;
+            filter: drop-shadow(0 0 15px rgba(16, 185, 129, 0.3));
+            transition: transform 0.3s ease, filter 0.3s ease;
+        }
+        .stat-card:hover .stat-icon {
+            transform: scale(1.25);
+            filter: drop-shadow(0 0 30px rgba(16, 185, 129, 0.6));
+        }
+        .stat-value {
+            font-size: 3rem;
+            font-weight: 800;
+            margin-bottom: 10px;
+            background: linear-gradient(135deg, var(--white) 0%, var(--green-light) 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 0 0 20px rgba(16, 185, 129, 0.2);
+        }
+        .stat-label {
+            color: rgba(245, 245, 245, 0.6);
+            font-size: 1.1rem;
+            font-weight: 300;
+            letter-spacing: 1px;
+        }
+        .tabs-container {
+            background: rgba(255, 255, 255, 0.02);
+            backdrop-filter: blur(30px);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius);
+            overflow: hidden;
+            margin-bottom: 60px;
+            box-shadow: var(--shadow);
+            animation: fadeInUp 1s ease-out 0.9s both;
+        }
+        .tabs-header {
+            display: flex;
+            background: rgba(26, 26, 26, 0.8);
+            border-bottom: 1px solid var(--glass-border);
+            overflow-x: auto;
+            scrollbar-width: none;
+        }
+        .tabs-header::-webkit-scrollbar {
+            display: none;
+        }
+        .tab-button {
+            flex: 1;
+            min-width: 160px;
+            padding: 25px;
+            background: transparent;
+            border: none;
+            color: rgba(245, 245, 245, 0.6);
+            font-size: 1.1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            letter-spacing: 1px;
+        }
+        .tab-button:hover {
+            color: var(--white);
+            background: rgba(16, 185, 129, 0.1);
+        }
+        .tab-button.active {
+            color: var(--green);
+            background: rgba(16, 185, 129, 0.15);
+        }
+        .tab-button.active::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 20%;
+            right: 20%;
+            height: 3px;
+            background: var(--green-gradient);
+            border-radius: 3px 3px 0 0;
+        }
+        .tab-content {
+            display: none;
+            padding: 50px;
+            animation: fadeIn 0.6s ease-out;
+        }
+        .tab-content.active {
+            display: block;
+        }
+        .section-title {
+            font-size: 2.2rem;
+            color: var(--white);
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--glass-border);
+            position: relative;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            animation: slideInLeft 0.8s ease-out;
+        }
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -1px;
+            left: 0;
+            width: 100px;
+            height: 2px;
+            background: var(--green-gradient);
+        }
+        .section-title i {
+            color: var(--green);
+            font-size: 2.5rem;
+            filter: drop-shadow(0 0 15px rgba(16, 185, 129, 0.3));
+        }
+        .form-section {
+            background: rgba(255, 255, 255, 0.02);
+            backdrop-filter: blur(20px);
+            padding: 40px;
+            border-radius: var(--radius);
+            margin-bottom: 40px;
+            border: 1px solid var(--glass-border);
+            transition: var(--transition);
+            animation: slideInLeft 0.8s ease-out;
+        }
+        .form-section:hover {
+            border-color: var(--green);
+            box-shadow: var(--shadow-light);
+            transform: translateY(-5px);
+        }
+        .form-section-title {
+            color: var(--white);
+            margin-bottom: 30px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            font-size: 1.4rem;
+        }
+        .form-section-title i {
+            color: var(--green);
+        }
+        .form-group {
+            margin-bottom: 25px;
+        }
+        .form-label {
+            display: block;
+            margin-bottom: 12px;
+            font-weight: 500;
+            color: rgba(245, 245, 245, 0.9);
+            font-size: 1rem;
+            letter-spacing: 0.5px;
+        }
+        .form-control {
+            width: 100%;
+            padding: 18px 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            font-size: 1rem;
+            color: var(--white);
+            transition: var(--transition);
+        }
+        .form-control:focus {
+            outline: none;
+            border-color: var(--green);
+            box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
+            background: rgba(255, 255, 255, 0.08);
+        }
+        textarea.form-control {
+            min-height: 120px;
+            resize: vertical;
+        }
+        .btn {
+            padding: 18px 35px;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            position: relative;
+            overflow: hidden;
+            letter-spacing: 1px;
+        }
+        .btn:hover {
+            transform: translateY(-5px);
+        }
+        .btn-success {
+            background: var(--green-gradient);
+            color: var(--white);
+            box-shadow: 0 10px 30px rgba(16, 185, 129, 0.2);
+        }
+        .btn-success:hover {
+            box-shadow: 0 15px 40px rgba(16, 185, 129, 0.3);
+        }
+        .btn-danger {
+            background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+            color: var(--white);
+            box-shadow: 0 10px 30px rgba(220, 38, 38, 0.2);
+        }
+        .btn-danger:hover {
+            box-shadow: 0 15px 40px rgba(220, 38, 38, 0.3);
+        }
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--white);
+            border: 1px solid var(--glass-border);
+        }
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.15);
+            border-color: var(--green);
+        }
+        .btn-sm {
+            padding: 12px 24px;
+            font-size: 1rem;
+        }
+        .button-group {
+            display: flex;
+            gap: 20px;
+            margin-top: 40px;
+            flex-wrap: wrap;
+        }
+        .table-section {
+            margin-top: 60px;
+            animation: slideInRight 0.8s ease-out;
+        }
+        .table-section-title {
+            color: var(--white);
+            margin-bottom: 30px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            font-size: 1.4rem;
+        }
+        .table-section-title i {
+            color: var(--green);
+        }
+        .table-container {
+            overflow-x: auto;
+            border-radius: var(--radius);
+            background: rgba(255, 255, 255, 0.02);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            box-shadow: var(--shadow-light);
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 1000px;
+        }
+        th {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--green);
+            font-weight: 600;
+            padding: 25px 20px;
+            text-align: left;
+            position: relative;
+            font-size: 1.1rem;
+            letter-spacing: 1px;
+            border-bottom: 1px solid var(--glass-border);
+        }
+        td {
+            padding: 20px;
+            border-bottom: 1px solid var(--glass-border);
+            color: rgba(245, 245, 245, 0.9);
+            transition: var(--transition);
+        }
+        tr:hover {
+            background: rgba(16, 185, 129, 0.05);
+        }
+        tr:hover td {
+            color: var(--white);
+        }
+        .table-actions {
+            display: flex;
+            gap: 12px;
+        }
+        .status-badge {
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+        .status-active {
+            background: rgba(16, 185, 129, 0.2);
+            color: var(--green);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+        }
+        .status-inactive {
+            background: rgba(107, 114, 128, 0.2);
+            color: rgba(245, 245, 245, 0.7);
+            border: 1px solid rgba(107, 114, 128, 0.3);
+        }
+        .message-container {
+            position: fixed;
+            top: 40px;
+            right: 40px;
+            z-index: 1000;
+            max-width: 450px;
+        }
+        .message {
+            padding: 25px 30px;
+            margin-bottom: 20px;
+            border-radius: var(--radius);
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            opacity: 0;
+            transform: translateX(100px);
+            transition: opacity 0.5s, transform 0.5s;
+            box-shadow: var(--shadow);
+        }
+        .message.show {
+            opacity: 1;
+            transform: translateX(0);
+        }
+        .message.success {
+            background: rgba(16, 185, 129, 0.15);
+            color: var(--green-light);
+            border-left: 4px solid var(--green);
+        }
+        .message.error {
+            background: rgba(220, 38, 38, 0.15);
+            color: #fca5a5;
+            border-left: 4px solid #dc2626;
+        }
+        .message i {
+            font-size: 1.5rem;
+        }
+        .search-container {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            align-items: flex-end;
+        }
+        .search-group {
+            flex: 1;
+            min-width: 250px;
+        }
+        .search-row {
+            display: flex;
+            gap: 15px;
+            align-items: flex-end;
+        }
+        @media (max-width: 1200px) {
+            .logo {
+                font-size: 3.5rem;
+                padding: 25px;
+            }
+            .logo-icon {
+                font-size: 4rem;
+            }
+            .tab-button {
+                min-width: 140px;
+                padding: 20px;
+            }
+            .tab-content {
+                padding: 40px;
+            }
+        }
+        @media (max-width: 768px) {
+            .main-container {
+                padding: 20px 15px;
+            }
+            .header {
+                margin-bottom: 40px;
+            }
+            .logo {
+                font-size: 2.5rem;
+                padding: 20px;
+                gap: 15px;
+            }
+            .logo-icon {
+                font-size: 3rem;
+            }
+            .logo-subtitle {
+                font-size: 1.1rem;
+            }
+            .tagline {
+                font-size: 1.1rem;
+                margin-bottom: 40px;
+            }
+            .stats-container {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            .stat-card {
+                padding: 30px 20px;
+            }
+            .tab-button {
+                min-width: 120px;
+                padding: 15px 10px;
+                font-size: 1rem;
+            }
+            .tab-content {
+                padding: 30px 20px;
+            }
+            .section-title {
+                font-size: 1.8rem;
+            }
+            .form-section {
+                padding: 30px 20px;
+            }
+            .btn {
+                padding: 15px 25px;
+                font-size: 1rem;
+            }
+            .message-container {
+                top: 20px;
+                right: 20px;
+                left: 20px;
+                max-width: none;
+            }
+        }
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+        ::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.05);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: var(--green);
+            border-radius: 5px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--green-light);
+        }
+        ::selection {
+            background: rgba(16, 185, 129, 0.3);
+            color: var(--white);
+        }
+    </style>
+</head>
+<body>
+    <!-- Фон -->
+    <div class="parallax-bg"></div>
+    <div class="parallax-layer layer-1"></div>
+    <div class="parallax-layer layer-2"></div>
+    <div class="floating-shapes">
+        <div class="shape"></div>
+        <div class="shape"></div>
+        <div class="shape"></div>
+    </div>
+
+    <!-- Сообщения -->
+    <div id="message-container" class="message-container"></div>
+
+    <!-- Основной контент -->
+    <div class="main-container">
+        <div class="header">
+            <div class="logo-container">
+                <div class="logo-glow"></div>
+                <div class="logo">
+                    <i class="fas fa-dumbbell logo-icon"></i>
+                    <span class="logo-text">FITNESSPRO CRM</span>
+                </div>
+            </div>
+            <div class="logo-subtitle">Элегантное управление фитнес-центром</div>
+            <p class="tagline">Мощная система управления фитнес-центром. Контролируйте клиентов, абонементы, посещения и оборудование в одном месте.</p>
+            <div class="stats-container">
+                <div class="stat-card">
+                    <i class="fas fa-users stat-icon"></i>
+                    <div class="stat-value"><span class="stat-value-num" id="clients-count">0</span></div>
+                    <div class="stat-label">Активных клиентов</div>
+                </div>
+                <div class="stat-card">
+                    <i class="fas fa-ticket-alt stat-icon"></i>
+                    <div class="stat-value"><span class="stat-value-num" id="subscriptions-count">0</span></div>
+                    <div class="stat-label">Активных абонементов</div>
+                </div>
+                <div class="stat-card">
+                    <i class="fas fa-door-open stat-icon"></i>
+                    <div class="stat-value"><span class="stat-value-num" id="visits-count">0</span></div>
+                    <div class="stat-label">Посещений сегодня</div>
+                </div>
+                <div class="stat-card">
+                    <i class="fas fa-dumbbell stat-icon"></i>
+                    <div class="stat-value"><span class="stat-value-num" id="equipment-count">0</span></div>
+                    <div class="stat-label">Единиц оборудования</div>
+                </div>
+            </div>
+        </div>
+        <div class="tabs-container">
+            <div class="tabs-header">
+                <button class="tab-button active" onclick="openTab(event, 'clients')">
+                    <i class="fas fa-users"></i><span>Клиенты</span>
+                </button>
+                <button class="tab-button" onclick="openTab(event, 'subscriptions')">
+                    <i class="fas fa-ticket-alt"></i><span>Абонементы</span>
+                </button>
+                <button class="tab-button" onclick="openTab(event, 'employees')">
+                    <i class="fas fa-user-tie"></i><span>Сотрудники</span>
+                </button>
+                <button class="tab-button" onclick="openTab(event, 'visits')">
+                    <i class="fas fa-door-open"></i><span>Посещения</span>
+                </button>
+                <button class="tab-button" onclick="openTab(event, 'equipment')">
+                    <i class="fas fa-dumbbell"></i><span>Оборудование</span>
+                </button>
+                <button class="tab-button" onclick="openTab(event, 'gyms')">
+                    <i class="fas fa-building"></i><span>Залы</span>
+                </button>
+                <button class="tab-button" onclick="openTab(event, 'rates')">
+                    <i class="fas fa-tags"></i><span>Тарифы</span>
+                </button>
+            </div>
+
+            <!-- ========= КЛИЕНТЫ ========= -->
+            <div id="clients" class="tab-content active">
+                <h2 class="section-title"><i class="fas fa-users"></i> Управление клиентами</h2>
+                <div class="form-section">
+                    <h3 class="form-section-title"><i class="fas fa-user-plus"></i> Добавить/Обновить клиента</h3>
+                    <form id="clientForm">
+                        <input type="hidden" id="clientId">
+                        <div class="form-group">
+                            <label class="form-label">ID (для обновления, оставьте пустым для создания):</label>
+                            <input type="number" id="clientIdInput" placeholder="Оставьте пустым для нового" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Имя *:</label>
+                            <input type="text" id="firstName" required class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Фамилия *:</label>
+                            <input type="text" id="lastName" required class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Телефон:</label>
+                            <input type="text" id="phone" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Email:</label>
+                            <input type="email" id="email" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Дата рождения:</label>
+                            <input type="date" id="dateOfBirth" class="form-control">
+                        </div>
+                        <div class="button-group">
+                            <button type="button" onclick="saveClient()" class="btn btn-success">
+                                <i class="fas fa-save"></i> Сохранить клиента
+                            </button>
+                            <button type="button" onclick="clearClientForm()" class="btn btn-secondary">
+                                <i class="fas fa-broom"></i> Очистить форму
+                            </button>
+                        </div>
+                    </form>
+                </div>
+                <div class="form-section">
+                    <h3 class="form-section-title"><i class="fas fa-search"></i> Поиск клиентов</h3>
+                    <div class="search-container">
+                        <div class="search-group">
+                            <label class="form-label">Поиск по ID:</label>
+                            <div class="search-row">
+                                <input type="number" id="searchClientId" placeholder="Введите ID клиента" class="form-control">
+                                <button onclick="getClientById()" class="btn btn-primary">
+                                    <i class="fas fa-search"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="search-group">
+                            <label class="form-label">Фильтр (ID или email):</label>
+                            <div class="search-row">
+                                <input type="text" id="searchClientFilter" placeholder="Введите ID или email" class="form-control">
+                                <button onclick="searchClients()" class="btn btn-primary">
+                                    <i class="fas fa-filter"></i>
+                                </button>
+                                <button onclick="getAllClients()" class="btn btn-secondary">
+                                    <i class="fas fa-list"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="table-section">
+                    <h3 class="table-section-title"><i class="fas fa-list"></i> Список клиентов</h3>
+                    <div class="table-container">
+                        <table id="clientsTable">
+                            <thead>
+                                <tr>
+                                    <th>ID</th><th>Имя</th><th>Фамилия</th><th>Телефон</th><th>Email</th><th>Действия</th>
+                                </tr>
+                            </thead>
+                            <tbody id="clientsList"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ========= АБОНЕМЕНТЫ ========= -->
+            <div id="subscriptions" class="tab-content">
+                <h2 class="section-title"><i class="fas fa-ticket-alt"></i> Управление абонементами</h2>
+                <div class="form-section">
+                    <h3 class="form-section-title"><i class="fas fa-plus-circle"></i> Добавить/Обновить абонемент</h3>
+                    <form id="subscriptionForm">
+                        <input type="hidden" id="subscriptionId">
+                        <div class="form-group">
+                            <label class="form-label">ID клиента *:</label>
+                            <input type="number" id="subClientId" required class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">ID тарифа *:</label>
+                            <input type="number" id="rateId" required class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Дата начала *:</label>
+                            <input type="date" id="startDate" required class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Дата окончания *:</label>
+                            <input type="date" id="endDate" required class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Статус:</label>
+                            <select id="subscriptionStatus" class="form-control">
+                                <option value="ACTIVE">Активен</option>
+                                <option value="NOT_ACTIVE">Неактивен</option>
+                                <option value="FREEZE">Заморожен</option>
+                            </select>
+                        </div>
+                        <div class="button-group">
+                            <button type="button" onclick="saveSubscription()" class="btn btn-success">
+                                <i class="fas fa-save"></i> Сохранить абонемент
+                            </button>
+                            <button type="button" onclick="clearSubscriptionForm()" class="btn btn-secondary">
+                                <i class="fas fa-broom"></i> Очистить форму
+                            </button>
+                        </div>
+                    </form>
+                </div>
+                <div class="table-section">
+                    <h3 class="table-section-title"><i class="fas fa-list"></i> Список абонементов</h3>
+                    <button onclick="getAllSubscriptions()" class="btn btn-primary" style="margin-bottom: 30px;">
+                        <i class="fas fa-sync-alt"></i> Загрузить все абонементы
+                    </button>
+                    <div class="table-container">
+                        <table id="subscriptionsTable">
+                            <thead>
+                                <tr><th>ID</th><th>Клиент ID</th><th>Тариф ID</th><th>Начало</th><th>Окончание</th><th>Статус</th><th>Действия</th></tr>
+                            </thead>
+                            <tbody id="subscriptionsList"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ========= СОТРУДНИКИ ========= -->
+            <div id="employees" class="tab-content">
+                <h2 class="section-title"><i class="fas fa-user-tie"></i> Управление сотрудниками</h2>
+                <div class="form-section">
+                    <h3 class="form-section-title"><i class="fas fa-user-plus"></i> Добавить/Обновить сотрудника</h3>
+                    <form id="employeeForm">
+                        <input type="hidden" id="employeeId">
+                        <div class="form-group">
+                            <label class="form-label">Имя *:</label>
+                            <input type="text" id="empFirstName" required class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Фамилия *:</label>
+                            <input type="text" id="empLastName" required class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Телефон:</label>
+                            <input type="text" id="empPhone" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Email:</label>
+                            <input type="email" id="empEmail" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">ID зала:</label>
+                            <input type="number" id="gymId" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Должность *:</label>
+                            <input type="text" id="post" required class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Зарплата *:</label>
+                            <input type="number" step="0.01" id="salary" required class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Дата приема *:</label>
+                            <input type="date" id="hireDate" required class="form-control">
+                        </div>
+                        <div class="button-group">
+                            <button type="button" onclick="saveEmployee()" class="btn btn-success">
+                                <i class="fas fa-save"></i> Сохранить сотрудника
+                            </button>
+                            <button type="button" onclick="clearEmployeeForm()" class="btn btn-secondary">
+                                <i class="fas fa-broom"></i> Очистить форму
+                            </button>
+                        </div>
+                    </form>
+                </div>
+                <div class="table-section">
+                    <h3 class="table-section-title"><i class="fas fa-list"></i> Список сотрудников</h3>
+                    <button onclick="getAllEmployees()" class="btn btn-primary" style="margin-bottom: 30px;">
+                        <i class="fas fa-sync-alt"></i> Загрузить всех сотрудников
+                    </button>
+                    <div class="table-container">
+                        <table id="employeesTable">
+                            <thead>
+                                <tr><th>ID</th><th>Имя</th><th>Фамилия</th><th>Должность</th><th>Зарплата</th><th>Действия</th></tr>
+                            </thead>
+                            <tbody id="employeesList"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ========= ПОСЕЩЕНИЯ ========= -->
+            <div id="visits" class="tab-content">
+                <h2 class="section-title"><i class="fas fa-door-open"></i> Управление посещениями</h2>
+                <div class="form-section">
+                    <h3 class="form-section-title"><i class="fas fa-plus-circle"></i> Добавить/Обновить посещение</h3>
+                    <form id="visitForm">
+                        <input type="hidden" id="visitId">
+                        <div class="form-group">
+                            <label class="form-label">ID клиента *:</label>
+                            <input type="number" id="visitClientId" required class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">ID зала *:</label>
+                            <input type="number" id="visitGymId" required class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Время входа *:</label>
+                            <input type="datetime-local" id="checkInTime" required class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Время выхода:</label>
+                            <input type="datetime-local" id="checkOutTime" class="form-control">
+                        </div>
+                        <div class="button-group">
+                            <button type="button" onclick="saveVisit()" class="btn btn-success">
+                                <i class="fas fa-save"></i> Сохранить посещение
+                            </button>
+                            <button type="button" onclick="clearVisitForm()" class="btn btn-secondary">
+                                <i class="fas fa-broom"></i> Очистить форму
+                            </button>
+                        </div>
+                    </form>
+                </div>
+                <div class="table-section">
+                    <h3 class="table-section-title"><i class="fas fa-list"></i> Список посещений</h3>
+                    <button onclick="getAllVisits()" class="btn btn-primary" style="margin-bottom: 30px;">
+                        <i class="fas fa-sync-alt"></i> Загрузить все посещения
+                    </button>
+                    <div class="table-container">
+                        <table id="visitsTable">
+                            <thead>
+                                <tr><th>ID</th><th>Клиент ID</th><th>Зал ID</th><th>Вход</th><th>Выход</th><th>Действия</th></tr>
+                            </thead>
+                            <tbody id="visitsList"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ========= ОБОРУДОВАНИЕ ========= -->
+            <div id="equipment" class="tab-content">
+                <h2 class="section-title"><i class="fas fa-dumbbell"></i> Управление оборудованием</h2>
+                <div class="form-section">
+                    <h3 class="form-section-title"><i class="fas fa-plus-circle"></i> Добавить/Обновить оборудование</h3>
+                    <form id="equipmentForm">
+                        <input type="hidden" id="equipmentId">
+                        <div class="form-group">
+                            <label class="form-label">Название *:</label>
+                            <input type="text" id="equipmentName" required class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Дата покупки:</label>
+                            <input type="date" id="buyDate" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Статус:</label>
+                            <select id="equipmentStatus" class="form-control">
+                                <option value="ACTIVE">Активно</option>
+                                <option value="NOT_ACTIVE">Неактивно</option>
+                                <option value="REPAIR">В ремонте</option>
+                                <option value="BROKE">Сломано</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">ID зала *:</label>
+                            <input type="number" id="equipmentGymId" required class="form-control">
+                        </div>
+                        <div class="button-group">
+                            <button type="button" onclick="saveEquipment()" class="btn btn-success">
+                                <i class="fas fa-save"></i> Сохранить оборудование
+                            </button>
+                            <button type="button" onclick="clearEquipmentForm()" class="btn btn-secondary">
+                                <i class="fas fa-broom"></i> Очистить форму
+                            </button>
+                        </div>
+                    </form>
+                </div>
+                <div class="table-section">
+                    <h3 class="table-section-title"><i class="fas fa-list"></i> Список оборудования</h3>
+                    <button onclick="getAllEquipment()" class="btn btn-primary" style="margin-bottom: 30px;">
+                        <i class="fas fa-sync-alt"></i> Загрузить всё оборудование
+                    </button>
+                    <div class="table-container">
+                        <table id="equipmentTable">
+                            <thead>
+                                <tr><th>ID</th><th>Название</th><th>Статус</th><th>Зал ID</th><th>Действия</th></tr>
+                            </thead>
+                            <tbody id="equipmentList"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ========= ЗАЛЫ ========= -->
+            <div id="gyms" class="tab-content">
+                <h2 class="section-title"><i class="fas fa-building"></i> Управление залами</h2>
+                <div class="form-section">
+                    <h3 class="form-section-title"><i class="fas fa-plus-circle"></i> Добавить/Обновить зал</h3>
+                    <form id="gymForm">
+                        <input type="hidden" id="gymId">
+                        <div class="form-group">
+                            <label class="form-label">Название *:</label>
+                            <input type="text" id="gymName" required class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Адрес *:</label>
+                            <input type="text" id="address" required class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Телефон:</label>
+                            <input type="text" id="gymPhone" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Время открытия *:</label>
+                            <input type="time" id="openTime" required class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Время закрытия *:</label>
+                            <input type="time" id="closeTime" required class="form-control">
+                        </div>
+                        <div class="button-group">
+                            <button type="button" onclick="saveGym()" class="btn btn-success">
+                                <i class="fas fa-save"></i> Сохранить зал
+                            </button>
+                            <button type="button" onclick="clearGymForm()" class="btn btn-secondary">
+                                <i class="fas fa-broom"></i> Очистить форму
+                            </button>
+                        </div>
+                    </form>
+                </div>
+                <div class="table-section">
+                    <h3 class="table-section-title"><i class="fas fa-list"></i> Список залов</h3>
+                    <button onclick="getAllGyms()" class="btn btn-primary" style="margin-bottom: 30px;">
+                        <i class="fas fa-sync-alt"></i> Загрузить все залы
+                    </button>
+                    <div class="table-container">
+                        <table id="gymsTable">
+                            <thead>
+                                <tr><th>ID</th><th>Название</th><th>Адрес</th><th>Телефон</th><th>Действия</th></tr>
+                            </thead>
+                            <tbody id="gymsList"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ========= ТАРИФЫ ========= -->
+            <div id="rates" class="tab-content">
+                <h2 class="section-title"><i class="fas fa-tags"></i> Управление тарифами</h2>
+                <div class="form-section">
+                    <h3 class="form-section-title"><i class="fas fa-plus-circle"></i> Добавить/Обновить тариф</h3>
+                    <form id="rateForm">
+                        <input type="hidden" id="rateId">
+                        <div class="form-group">
+                            <label class="form-label">Название *:</label>
+                            <input type="text" id="rateName" required class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Цена *:</label>
+                            <input type="number" step="0.01" id="price" required class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Период цены:</label>
+                            <input type="text" id="pricePeriod" placeholder="Например: месяц, год" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Длительность (дней) *:</label>
+                            <input type="number" id="durationDays" required class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Описание:</label>
+                            <textarea id="description" rows="3" class="form-control"></textarea>
+                        </div>
+                        <div class="button-group">
+                            <button type="button" onclick="saveRate()" class="btn btn-success">
+                                <i class="fas fa-save"></i> Сохранить тариф
+                            </button>
+                            <button type="button" onclick="clearRateForm()" class="btn btn-secondary">
+                                <i class="fas fa-broom"></i> Очистить форму
+                            </button>
+                        </div>
+                    </form>
+                </div>
+                <div class="table-section">
+                    <h3 class="table-section-title"><i class="fas fa-list"></i> Список тарифов</h3>
+                    <button onclick="getAllRates()" class="btn btn-primary" style="margin-bottom: 30px;">
+                        <i class="fas fa-sync-alt"></i> Загрузить все тарифы
+                    </button>
+                    <div class="table-container">
+                        <table id="ratesTable">
+                            <thead>
+                                <tr><th>ID</th><th>Название</th><th>Цена</th><th>Длительность</th><th>Действия</th></tr>
+                            </thead>
+                            <tbody id="ratesList"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE = 'http://localhost:8080/gym';
+
+        function showMessage(text, type = 'success') {
+            const container = document.getElementById('message-container');
+            const message = document.createElement('div');
+            message.className = `message ${type}`;
+            message.innerHTML = `<i class="fas fa-${type === 'success' ? 'check-circle' : 'exclamation-circle'}"></i><span>${text}</span>`;
+            container.appendChild(message);
+            setTimeout(() => message.classList.add('show'), 10);
+            setTimeout(() => {
+                message.classList.remove('show');
+                setTimeout(() => message.remove(), 500);
+            }, 5000);
+        }
+
+        function openTab(evt, tabName) {
+            document.querySelectorAll('.tab-button').forEach(b => b.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            evt.currentTarget.classList.add('active');
+            document.getElementById(tabName).classList.add('active');
+
+            const loaders = {
+                clients: getAllClients,
+                subscriptions: getAllSubscriptions,
+                employees: getAllEmployees,
+                visits: getAllVisits,
+                equipment: getAllEquipment,
+                gyms: getAllGyms,
+                rates: getAllRates
+            };
+            if (loaders[tabName]) loaders[tabName]();
+        }
+
+        async function makeRequest(url, method = 'GET', data = null) {
+            try {
+                const options = { method, headers: { 'Content-Type': 'application/json' } };
+                if (data) options.body = JSON.stringify(data);
+                const response = await fetch(API_BASE + url, options);
+                if (!response.ok) throw new Error(`HTTP ${response.status}: ${await response.text()}`);
+                return response.status === 204 ? null : await response.json();
+            } catch (error) {
+                console.error('API Error:', error);
+                showMessage(`Ошибка: ${error.message}`, 'error');
+                throw error;
+            }
+        }
+
+        // ========== СТАТИСТИКА ==========
+        async function updateStats() {
+            try {
+                const [clients, subs, visits, eqs] = await Promise.all([
+                    makeRequest('/client/get/all'),
+                    makeRequest('/subscription/get/all'),
+                    makeRequest('/visit/get/all'),
+                    makeRequest('/equipment/get/all')
+                ]);
+                document.getElementById('clients-count').textContent = clients.length;
+                document.getElementById('subscriptions-count').textContent = subs.length;
+                const today = new Date().toISOString().split('T')[0];
+                const todayVisits = visits.filter(v => v.checkInTime?.startsWith(today)).length;
+                document.getElementById('visits-count').textContent = todayVisits;
+                document.getElementById('equipment-count').textContent = eqs.length;
+            } catch (err) {
+                console.warn('Не удалось обновить статистику');
+            }
+        }
+
+        // ========== КЛИЕНТЫ ==========
+        async function saveClient() {
+            const id = document.getElementById('clientIdInput').value;
+            const data = {
+                firstName: document.getElementById('firstName').value,
+                lastName: document.getElementById('lastName').value,
+                phone: document.getElementById('phone').value,
+                email: document.getElementById('email').value,
+                dateOfBirth: document.getElementById('dateOfBirth').value
+            };
+            try {
+                if (id) await makeRequest(`/client/update/${id}`, 'PUT', data);
+                else await makeRequest('/client/create', 'POST', data);
+                showMessage(id ? 'Клиент обновлен' : 'Клиент создан');
+                getAllClients(); clearClientForm(); updateStats();
+            } catch { showMessage('Ошибка сохранения клиента', 'error'); }
+        }
+        function clearClientForm() {
+            document.getElementById('clientIdInput').value = '';
+            document.getElementById('firstName').value = '';
+            document.getElementById('lastName').value = '';
+            document.getElementById('phone').value = '';
+            document.getElementById('email').value = '';
+            document.getElementById('dateOfBirth').value = '';
+        }
+        async function getClientById() {
+            const id = document.getElementById('searchClientId').value;
+            if (!id) return showMessage('Введите ID', 'error');
+            try {
+                const c = await makeRequest(`/client/get/${id}`);
+                document.getElementById('clientIdInput').value = c.clientId;
+                document.getElementById('firstName').value = c.firstName || '';
+                document.getElementById('lastName').value = c.lastName || '';
+                document.getElementById('phone').value = c.phone || '';
+                document.getElementById('email').value = c.email || '';
+                document.getElementById('dateOfBirth').value = c.dateOfBirth || '';
+                showMessage('Клиент найден');
+            } catch { showMessage('Клиент не найден', 'error'); }
+        }
+        async function getAllClients() {
+            try {
+                const clients = await makeRequest('/client/get/all');
+                document.getElementById('clientsList').innerHTML = clients.map(c => `
+                    <tr>
+                        <td>${c.clientId || ''}</td>
+                        <td>${c.firstName || ''}</td>
+                        <td>${c.lastName || ''}</td>
+                        <td>${c.phone || ''}</td>
+                        <td>${c.email || ''}</td>
+                        <td>
+                            <div class="table-actions">
+                                <button onclick="loadClientForEdit(${c.clientId})" class="btn btn-primary btn-sm"><i class="fas fa-edit"></i></button>
+                                <button onclick="deleteClient(${c.clientId})" class="btn btn-danger btn-sm"><i class="fas fa-trash"></i></button>
+                            </div>
+                        </td>
+                    </tr>
+                `).join('');
+            } catch { showMessage('Ошибка загрузки клиентов', 'error'); }
+        }
+        async function searchClients() {
+            const f = document.getElementById('searchClientFilter').value;
+            if (!f) return getAllClients();
+            try {
+                const isId = !isNaN(f);
+                const clients = await makeRequest(`/client/search/filter?client_id=${isId ? f : ''}&client_email=${isId ? '' : f}&pageSize=100&pageNumber=0`);
+                document.getElementById('clientsList').innerHTML = clients.map(c => `
+                    <tr>
+                        <td>${c.clientId || ''}</td>
+                        <td>${c.firstName || ''}</td>
+                        <td>${c.lastName || ''}</td>
+                        <td>${c.phone || ''}</td>
+                        <td>${c.email || ''}</td>
+                        <td>
+                            <div class="table-actions">
+                                <button onclick="loadClientForEdit(${c.clientId})" class="btn btn-primary btn-sm"><i class="fas fa-edit"></i></button>
+                                <button onclick="deleteClient(${c.clientId})" class="btn btn-danger btn-sm"><i class="fas fa-trash"></i></button>
+                            </div>
+                        </td>
+                    </tr>
+                `).join('');
+                showMessage(`Найдено ${clients.length} клиентов`);
+            } catch { showMessage('Ошибка поиска', 'error'); }
+        }
+        async function loadClientForEdit(id) {
+            try {
+                const c = await makeRequest(`/client/get/${id}`);
+                document.getElementById('clientIdInput').value = c.clientId;
+                document.getElementById('firstName').value = c.firstName || '';
+                document.getElementById('lastName').value = c.lastName || '';
+                document.getElementById('phone').value = c.phone || '';
+                document.getElementById('email').value = c.email || '';
+                document.getElementById('dateOfBirth').value = c.dateOfBirth || '';
+                showMessage('Клиент загружен');
+            } catch { showMessage('Ошибка загрузки клиента', 'error'); }
+        }
+        async function deleteClient(id) {
+            if (!confirm(`Удалить клиента ${id}?`)) return;
+            try {
+                await makeRequest(`/client/delete/${id}`, 'DELETE');
+                showMessage('Клиент удален');
+                getAllClients(); updateStats();
+            } catch { showMessage('Ошибка удаления клиента', 'error'); }
+        }
+
+        // ========== АБОНЕМЕНТЫ ==========
+        async function saveSubscription() {
+            const data = {
+                clientId: +document.getElementById('subClientId').value,
+                rateId: +document.getElementById('rateId').value,
+                startDate: document.getElementById('startDate').value,
+                endDate: document.getElementById('endDate').value,
+                subscriptionStatus: document.getElementById('subscriptionStatus').value
+            };
+            try {
+                await makeRequest('/subscription/create', 'POST', data);
+                showMessage('Абонемент создан');
+                getAllSubscriptions(); clearSubscriptionForm(); updateStats();
+            } catch { showMessage('Ошибка создания абонемента', 'error'); }
+        }
+        function clearSubscriptionForm() {
+            document.getElementById('subClientId').value = '';
+            document.getElementById('rateId').value = '';
+            document.getElementById('startDate').value = '';
+            document.getElementById('endDate').value = '';
+            document.getElementById('subscriptionStatus').value = 'ACTIVE';
+        }
+        async function getAllSubscriptions() {
+            try {
+                const subs = await makeRequest('/subscription/get/all');
+                document.getElementById('subscriptionsList').innerHTML = subs.map(s => {
+                    const cls = s.subscriptionStatus === 'ACTIVE' ? 'status-active' : 'status-inactive';
+                    return `<tr>
+                        <td>${s.subscriptionId || ''}</td>
+                        <td>${s.clientId || ''}</td>
+                        <td>${s.rateId || ''}</td>
+                        <td>${s.startDate || ''}</td>
+                        <td>${s.endDate || ''}</td>
+                        <td><span class="status-badge ${cls}">${s.subscriptionStatus || ''}</span></td>
+                        <td>
+                            <div class="table-actions">
+                                <button onclick="loadSubscriptionForEdit(${s.subscriptionId})" class="btn btn-primary btn-sm"><i class="fas fa-edit"></i></button>
+                                <button onclick="deleteSubscription(${s.subscriptionId})" class="btn btn-danger btn-sm"><i class="fas fa-trash"></i></button>
+                            </div>
+                        </td>
+                    </tr>`;
+                }).join('');
+            } catch { showMessage('Ошибка загрузки абонементов', 'error'); }
+        }
+        async function loadSubscriptionForEdit(id) {
+            try {
+                const s = await makeRequest(`/subscription/get/${id}`);
+                document.getElementById('subClientId').value = s.clientId || '';
+                document.getElementById('rateId').value = s.rateId || '';
+                document.getElementById('startDate').value = s.startDate || '';
+                document.getElementById('endDate').value = s.endDate || '';
+                document.getElementById('subscriptionStatus').value = s.subscriptionStatus || 'ACTIVE';
+                showMessage('Абонемент загружен');
+            } catch { showMessage('Ошибка загрузки абонемента', 'error'); }
+        }
+        async function deleteSubscription(id) {
+            if (!confirm(`Удалить абонемент ${id}?`)) return;
+            try {
+                await makeRequest(`/subscription/delete/${id}`, 'DELETE');
+                showMessage('Абонемент удален');
+                getAllSubscriptions(); updateStats();
+            } catch { showMessage('Ошибка удаления', 'error'); }
+        }
+
+        // ========== СОТРУДНИКИ ==========
+        async function saveEmployee() {
+            const data = {
+                firstName: document.getElementById('empFirstName').value,
+                lastName: document.getElementById('empLastName').value,
+                empPhone: document.getElementById('empPhone').value,
+                empEmail: document.getElementById('empEmail').value,
+                gymId: document.getElementById('gymId').value ? +document.getElementById('gymId').value : null,
+                post: document.getElementById('post').value,
+                salary: +document.getElementById('salary').value,
+                hireDate: document.getElementById('hireDate').value
+            };
+            try {
+                await makeRequest('/employee/create', 'POST', data);
+                showMessage('Сотрудник создан');
+                getAllEmployees(); clearEmployeeForm();
+            } catch { showMessage('Ошибка создания сотрудника', 'error'); }
+        }
+        function clearEmployeeForm() {
+            document.getElementById('empFirstName').value = '';
+            document.getElementById('empLastName').value = '';
+            document.getElementById('empPhone').value = '';
+            document.getElementById('empEmail').value = '';
+            document.getElementById('gymId').value = '';
+            document.getElementById('post').value = '';
+            document.getElementById('salary').value = '';
+            document.getElementById('hireDate').value = '';
+        }
+        async function getAllEmployees() {
+            try {
+                const emps = await makeRequest('/employee/get/all');
+                document.getElementById('employeesList').innerHTML = emps.map(e => `
+                    <tr>
+                        <td>${e.employeeId || ''}</td>
+                        <td>${e.firstName || ''}</td>
+                        <td>${e.lastName || ''}</td>
+                        <td>${e.post || ''}</td>
+                        <td>${e.salary?.toFixed(2) || ''}</td>
+                        <td>
+                            <div class="table-actions">
+                                <button onclick="loadEmployeeForEdit(${e.employeeId})" class="btn btn-primary btn-sm"><i class="fas fa-edit"></i></button>
+                                <button onclick="deleteEmployee(${e.employeeId})" class="btn btn-danger btn-sm"><i class="fas fa-trash"></i></button>
+                            </div>
+                        </td>
+                    </tr>
+                `).join('');
+            } catch { showMessage('Ошибка загрузки', 'error'); }
+        }
+        async function loadEmployeeForEdit(id) {
+            try {
+                const e = await makeRequest(`/employee/get/${id}`);
+                document.getElementById('empFirstName').value = e.firstName || '';
+                document.getElementById('empLastName').value = e.lastName || '';
+                document.getElementById('empPhone').value = e.empPhone || '';
+                document.getElementById('empEmail').value = e.empEmail || '';
+                document.getElementById('gymId').value = e.gymId || '';
+                document.getElementById('post').value = e.post || '';
+                document.getElementById('salary').value = e.salary || '';
+                document.getElementById('hireDate').value = e.hireDate || '';
+                showMessage('Сотрудник загружен');
+            } catch { showMessage('Ошибка загрузки', 'error'); }
+        }
+        async function deleteEmployee(id) {
+            if (!confirm(`Удалить сотрудника ${id}?`)) return;
+            try {
+                await makeRequest(`/employee/delete/${id}`, 'DELETE');
+                showMessage('Сотрудник удален');
+                getAllEmployees();
+            } catch { showMessage('Ошибка удаления', 'error'); }
+        }
+
+        // ========== ПОСЕЩЕНИЯ ==========
+        async function saveVisit() {
+            const data = {
+                clientId: +document.getElementById('visitClientId').value,
+                gymId: +document.getElementById('visitGymId').value,
+                checkInTime: document.getElementById('checkInTime').value + ':00',
+                checkOutTime: document.getElementById('checkOutTime').value ? document.getElementById('checkOutTime').value + ':00' : null
+            };
+            try {
+                await makeRequest('/visit/create', 'POST', data);
+                showMessage('Посещение создано');
+                getAllVisits(); clearVisitForm(); updateStats();
+            } catch { showMessage('Ошибка создания посещения', 'error'); }
+        }
+        function clearVisitForm() {
+            document.getElementById('visitClientId').value = '';
+            document.getElementById('visitGymId').value = '';
+            document.getElementById('checkInTime').value = '';
+            document.getElementById('checkOutTime').value = '';
+        }
+        async function getAllVisits() {
+            try {
+                const visits = await makeRequest('/visit/get/all');
+                document.getElementById('visitsList').innerHTML = visits.map(v => `
+                    <tr>
+                        <td>${v.visitId || ''}</td>
+                        <td>${v.clientId || ''}</td>
+                        <td>${v.gymId || ''}</td>
+                        <td>${(v.checkInTime || '').replace('T', ' ').substring(0,16)}</td>
+                        <td>${(v.checkOutTime || '').replace('T', ' ').substring(0,16)}</td>
+                        <td>
+                            <div class="table-actions">
+                                <button onclick="loadVisitForEdit(${v.visitId})" class="btn btn-primary btn-sm"><i class="fas fa-edit"></i></button>
+                                <button onclick="deleteVisit(${v.visitId})" class="btn btn-danger btn-sm"><i class="fas fa-trash"></i></button>
+                            </div>
+                        </td>
+                    </tr>
+                `).join('');
+            } catch { showMessage('Ошибка загрузки', 'error'); }
+        }
+        async function loadVisitForEdit(id) {
+            try {
+                const v = await makeRequest(`/visit/get/${id}`);
+                document.getElementById('visitClientId').value = v.clientId || '';
+                document.getElementById('visitGymId').value = v.gymId || '';
+                document.getElementById('checkInTime').value = v.checkInTime ? v.checkInTime.substring(0,16) : '';
+                document.getElementById('checkOutTime').value = v.checkOutTime ? v.checkOutTime.substring(0,16) : '';
+                showMessage('Посещение загружено');
+            } catch { showMessage('Ошибка загрузки', 'error'); }
+        }
+        async function deleteVisit(id) {
+            if (!confirm(`Удалить посещение ${id}?`)) return;
+            try {
+                await makeRequest(`/visit/delete/${id}`, 'DELETE');
+                showMessage('Посещение удалено');
+                getAllVisits(); updateStats();
+            } catch { showMessage('Ошибка удаления', 'error'); }
+        }
+
+        // ========== ОБОРУДОВАНИЕ ==========
+        async function saveEquipment() {
+            const data = {
+                equipmentName: document.getElementById('equipmentName').value,
+                buyDate: document.getElementById('buyDate').value,
+                equipmentStatus: document.getElementById('equipmentStatus').value,
+                gymId: +document.getElementById('equipmentGymId').value
+            };
+            try {
+                await makeRequest('/equipment/create', 'POST', data);
+                showMessage('Оборудование создано');
+                getAllEquipment(); clearEquipmentForm(); updateStats();
+            } catch { showMessage('Ошибка создания', 'error'); }
+        }
+        function clearEquipmentForm() {
+            document.getElementById('equipmentName').value = '';
+            document.getElementById('buyDate').value = '';
+            document.getElementById('equipmentStatus').value = 'ACTIVE';
+            document.getElementById('equipmentGymId').value = '';
+        }
+        async function getAllEquipment() {
+            try {
+                const eqs = await makeRequest('/equipment/get/all');
+                document.getElementById('equipmentList').innerHTML = eqs.map(e => {
+                    const cls = e.equipmentStatus === 'ACTIVE' ? 'status-active' : 'status-inactive';
+                    return `<tr>
+                        <td>${e.equipmentId || ''}</td>
+                        <td>${e.equipmentName || ''}</td>
+                        <td><span class="status-badge ${cls}">${e.equipmentStatus || ''}</span></td>
+                        <td>${e.gymId || ''}</td>
+                        <td>
+                            <div class="table-actions">
+                                <button onclick="loadEquipmentForEdit(${e.equipmentId})" class="btn btn-primary btn-sm"><i class="fas fa-edit"></i></button>
+                                <button onclick="deleteEquipment(${e.equipmentId})" class="btn btn-danger btn-sm"><i class="fas fa-trash"></i></button>
+                            </div>
+                        </td>
+                    </tr>`;
+                }).join('');
+            } catch { showMessage('Ошибка загрузки', 'error'); }
+        }
+        async function loadEquipmentForEdit(id) {
+            try {
+                const e = await makeRequest(`/equipment/get/${id}`);
+                document.getElementById('equipmentName').value = e.equipmentName || '';
+                document.getElementById('buyDate').value = e.buyDate || '';
+                document.getElementById('equipmentStatus').value = e.equipmentStatus || 'ACTIVE';
+                document.getElementById('equipmentGymId').value = e.gymId || '';
+                showMessage('Оборудование загружено');
+            } catch { showMessage('Ошибка загрузки', 'error'); }
+        }
+        async function deleteEquipment(id) {
+            if (!confirm(`Удалить оборудование ${id}?`)) return;
+            try {
+                await makeRequest(`/equipment/delete/${id}`, 'DELETE');
+                showMessage('Оборудование удалено');
+                getAllEquipment(); updateStats();
+            } catch { showMessage('Ошибка удаления', 'error'); }
+        }
+
+        // ========== ЗАЛЫ ==========
+        async function saveGym() {
+            const data = {
+                gymName: document.getElementById('gymName').value,
+                address: document.getElementById('address').value,
+                gymPhone: document.getElementById('gymPhone').value,
+                openTime: document.getElementById('openTime').value + ':00',
+                closeTime: document.getElementById('closeTime').value + ':00'
+            };
+            try {
+                await makeRequest('/create', 'POST', data);
+                showMessage('Зал создан');
+                getAllGyms(); clearGymForm();
+            } catch { showMessage('Ошибка создания зала', 'error'); }
+        }
+        function clearGymForm() {
+            document.getElementById('gymName').value = '';
+            document.getElementById('address').value = '';
+            document.getElementById('gymPhone').value = '';
+            document.getElementById('openTime').value = '';
+            document.getElementById('closeTime').value = '';
+        }
+        async function getAllGyms() {
+            try {
+                const gyms = await makeRequest('/get/all');
+                document.getElementById('gymsList').innerHTML = gyms.map(g => `
+                    <tr>
+                        <td>${g.gymId || ''}</td>
+                        <td>${g.gymName || ''}</td>
+                        <td>${g.address || ''}</td>
+                        <td>${g.gymPhone || ''}</td>
+                        <td>
+                            <div class="table-actions">
+                                <button onclick="loadGymForEdit(${g.gymId})" class="btn btn-primary btn-sm"><i class="fas fa-edit"></i></button>
+                                <button onclick="deleteGym(${g.gymId})" class="btn btn-danger btn-sm"><i class="fas fa-trash"></i></button>
+                            </div>
+                        </td>
+                    </tr>
+                `).join('');
+            } catch { showMessage('Ошибка загрузки залов', 'error'); }
+        }
+        async function loadGymForEdit(id) {
+            try {
+                const g = await makeRequest(`/get/${id}`);
+                document.getElementById('gymName').value = g.gymName || '';
+                document.getElementById('address').value = g.address || '';
+                document.getElementById('gymPhone').value = g.gymPhone || '';
+                document.getElementById('openTime').value = g.openTime ? g.openTime.substring(0,5) : '';
+                document.getElementById('closeTime').value = g.closeTime ? g.closeTime.substring(0,5) : '';
+                showMessage('Зал загружен');
+            } catch { showMessage('Ошибка загрузки зала', 'error'); }
+        }
+        async function deleteGym(id) {
+            if (!confirm(`Удалить зал ${id}?`)) return;
+            try {
+                await makeRequest(`/delete/${id}`, 'DELETE');
+                showMessage('Зал удален');
+                getAllGyms();
+            } catch { showMessage('Ошибка удаления зала', 'error'); }
+        }
+
+        // ========== ТАРИФЫ ==========
+        async function saveRate() {
+            const data = {
+                rateName: document.getElementById('rateName').value,
+                price: +document.getElementById('price').value,
+                pricePeriod: document.getElementById('pricePeriod').value,
+                durationDays: +document.getElementById('durationDays').value,
+                description: document.getElementById('description').value
+            };
+            try {
+                await makeRequest('/rate/create', 'POST', data);
+                showMessage('Тариф создан');
+                getAllRates(); clearRateForm();
+            } catch { showMessage('Ошибка создания тарифа', 'error'); }
+        }
+        function clearRateForm() {
+            document.getElementById('rateName').value = '';
+            document.getElementById('price').value = '';
+            document.getElementById('pricePeriod').value = '';
+            document.getElementById('durationDays').value = '';
+            document.getElementById('description').value = '';
+        }
+        async function getAllRates() {
+            try {
+                const rates = await makeRequest('/rate/get/all');
+                document.getElementById('ratesList').innerHTML = rates.map(r => `
+                    <tr>
+                        <td>${r.rateId || ''}</td>
+                        <td>${r.rateName || ''}</td>
+                        <td>${r.price?.toFixed(2) || ''}</td>
+                        <td>${r.durationDays || ''} дней</td>
+                        <td>
+                            <div class="table-actions">
+                                <button onclick="loadRateForEdit(${r.rateId})" class="btn btn-primary btn-sm"><i class="fas fa-edit"></i></button>
+                                <button onclick="deleteRate(${r.rateId})" class="btn btn-danger btn-sm"><i class="fas fa-trash"></i></button>
+                            </div>
+                        </td>
+                    </tr>
+                `).join('');
+            } catch { showMessage('Ошибка загрузки', 'error'); }
+        }
+        async function loadRateForEdit(id) {
+            try {
+                const r = await makeRequest(`/rate/get/${id}`);
+                document.getElementById('rateName').value = r.rateName || '';
+                document.getElementById('price').value = r.price || '';
+                document.getElementById('pricePeriod').value = r.pricePeriod || '';
+                document.getElementById('durationDays').value = r.durationDays || '';
+                document.getElementById('description').value = r.description || '';
+                showMessage('Тариф загружен');
+            } catch { showMessage('Ошибка загрузки', 'error'); }
+        }
+        async function deleteRate(id) {
+            if (!confirm(`Удалить тариф ${id}?`)) return;
+            try {
+                await makeRequest(`/rate/delete/${id}`, 'DELETE');
+                showMessage('Тариф удален');
+                getAllRates();
+            } catch { showMessage('Ошибка удаления', 'error'); }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            getAllClients();
+            updateStats();
+            const now = new Date();
+            const local = now.toISOString().slice(0,16);
+            document.getElementById('checkInTime').value = local;
+            document.getElementById('checkOutTime').value = local;
+        });
+    </script>
+</body>
+</html>
